@@ -69,7 +69,12 @@ class PlayTableSimEnv(gym.Env):
             )
             for name in cameras
         ]
-        log.info(f"Using calvin_env with commit {get_git_commit_hash(Path(calvin_env.__file__))}.")
+
+        if calvin_env.__file__ is None:
+            log.warning("calvin_env.__file__ is None. The module may not be loaded correctly.")
+            log.info(f"calvin_env.__path__: {get_git_commit_hash(Path(calvin_env.__path__[0] + '/__init__.py'))}")
+        else:
+            log.info(f"Using calvin_env with commit {get_git_commit_hash(Path(calvin_env.__file__))}.")
 
     def __del__(self):
         self.close()
